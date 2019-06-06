@@ -99,10 +99,12 @@
                 var cafeName = this.result[index].name;
                 this.$http.get('http://localhost:8888/getCafeMenu',{params:{cafe:cafeName}}).then((result) => {//고른 카페에 대한 메뉴 불러오는 것
                     console.log(result);
-                    this.menuList.push({
-                        menu: result.data.menu,//메뉴
-                        avgStar : result.data.avgStar,//평균 별점
-                    });
+                    for(var i=0;i<result.data.length;i++){
+                        this.menuList.push({
+                            menu: result.data[i].menu,//메뉴
+                            avgStar : result.data[i].avgStar,//평균 별점
+                        });
+                    }
                 }).catch((err) => {
                     
                 });
@@ -126,7 +128,7 @@
                 else if(event.target.value=="3"){
                     this.cost = 3;
                 }
-                else(event.target.value=="4"){
+                else{
                     this.cost = 4;
                 }
             },
@@ -143,10 +145,12 @@
                 console.log(data);
                 this.$http.get('http://localhost:8888/recommendationCafe',{params:{data: data}}).then((result) => {
                     console.log(result)
-                    this.result.push({
-                        name : result.data.cafeName,
-                        address : result.data.cafeAddress,
-                    });
+                    for(var i=0;i<result.data.length;i++){
+                        this.result.push({
+                            name : result.data[i].cafeName,
+                            address : result.data[i].cafeAddress,
+                        });
+                    }
                 }).catch((err) => {
                     
                 });
@@ -155,10 +159,12 @@
         created: function () {
             this.$http.get('http://localhost:8888/getCafe').then((result) => {//카페리스트 불러오기
                 console.log(result);
-                this.result.push({
-                    name : result.data.cafeName,
-                    address : result.data.cafeAddress,
-                });
+                for(var i=0;i<result.data.length;i++){
+                    this.result.push({
+                        name : result.data[i].cafeName,
+                        address : result.data[i].cafeAddress,
+                    });
+                }
             }).catch((err) => {
                 
             });
