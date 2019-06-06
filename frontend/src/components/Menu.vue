@@ -9,7 +9,7 @@
         <div class="Menu" v-if="selectedMenu.length!=0">★★★ : {{selectedMenu.three}}명</div>
         <div class="Menu" v-if="selectedMenu.length!=0">★★ : {{selectedMenu.two}}명</div>
         <div class="Menu" v-if="selectedMenu.length!=0">★ : {{selectedMenu.one}}명</div><br>
-        <form  v-on:submit.prevent="rating">
+        <form v-if="selectedMenu.length!=0" v-on:submit.prevent="rating">
             <label>메뉴에 대한 평가를 해주세요!</label><br>
             <select class="selectpicker select-size" @change="selectStarscore($event)">
                 <option value="" selected disabled hidden style="font-color:#aab1bb;">선택해주세요</option>
@@ -56,8 +56,8 @@
             },
             selectMenu(index){
                 this.selectedMenu=[];
-                var cafeName = this.menuList[index];
-                this.MenuName = this.menuList[index];
+                var cafeName = this.menuList[index].cafe;
+                this.MenuName = this.menuList[index].menu;
                 var data = {
                     cafe: cafeName,
                     menu : this.MenuName,
