@@ -1,8 +1,8 @@
 const http = require('http')
 const app = require('./app')
 
-const { PORT } = require('./constants')
+// const { PORT } = 8888
 
-http.createServer(app).listen(PORT, () => {
-    console.info(`Backend Server is running on ${PORT}..`)
+http.createServer(app).listen(8888, () => {
+    console.info(`Backend Server is running on 8888..`)
 })
