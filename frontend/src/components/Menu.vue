@@ -19,6 +19,7 @@
                 <option value="2">★★</option>
                 <option value="1">★</option>
             </select><br>
+            <button type="submit">평가하기</button>
         </form>
     </div>
 </template>
@@ -44,6 +45,7 @@
                     console.log(result);
                     for(var i=0;i<result.data.length;i++){
                         this.menuList.push({
+                            cafe: cafeName,
                             menu: result.data[i].menu,//메뉴
                             avgStar : result.data[i].avgStar,//평균 별점
                         });
@@ -54,9 +56,10 @@
             },
             selectMenu(index){
                 this.selectedMenu=[];
+                var cafeName = this.menuList[index];
                 this.MenuName = this.menuList[index];
                 var data = {
-                    cafe: this.selected,
+                    cafe: cafeName,
                     menu : this.MenuName,
                 };
                 this.$http.get('http://localhost:8888/getSelectMenu',{params:{data:data}}).then((result) => {//카페와 메뉴이름으로 메뉴 별점 가져오기
