@@ -1,13 +1,8 @@
 <template>
     <div id="menu">
         <h1>Menu</h1>
-        <form v-on:submit.prevent="selectCafe">
-            <label>별점을 보시고 싶은/주고 싶은 카페를 선택해주세요!</label><br>
-            <select class="custom-select" style="width:200px; height:30px" v-model="selected" name="items1">
-                <option v-for="cl in cafeList" :key="cafeList.id">{{cl}}</option>
-            </select>
-            <button type="submit">선택</button>
-        </form>
+        <label>별점을 보시고 싶은/주고 싶은 카페를 선택해주세요!</label><br>
+        <div @click="selectCafe(index)" v-for="(cl,index) in result" :key="result.id">{{cl.name}}</div>
         <div class="selectMenu" v-for="(ml,index) in menuList" v-if="menuList.length!=0" @click="selectMenu(index)">메뉴 : {{ml.menu}} | 평균별점 : {{ml.avgStar}}</div>
         <div class="Menu" v-if="selectedMenu.length!=0">★★★★★ : {{selectedMenu.five}}명</div>
         <div class="Menu" v-if="selectedMenu.length!=0">★★★★ : {{selectedMenu.four}}명</div>
@@ -33,18 +28,19 @@
         name: "Menu",
         data: function () {
             return {
-                selected:[],
+                result:[],
                 cafeList:[],
-                menuList:{},
-                selectedMenu:{},
+                menuList:[],
+                selectedMenu:[],
                 starScore:[],
                 MenuName:"",
             }
         },
         methods: {
-            selectCafe() {
+            selectCafe(index) {
                 this.menuList=[];//카페 선택할때 메뉴 비워주기
-                this.$http.get('http://localhost:8888/getCafeMenu',{params:{cafe:this.selected}}).then((result) => {//고른 카페에 대한 메뉴 불러오는 것
+                var cafeName = this.result[index].name;
+                this.$http.get('http://localhost:8888/getCafeMenu',{params:{cafe:cafeName}}).then((result) => {//고른 카페에 대한 메뉴 불러오는 것
                     console.log(result);
                     this.menuList.push({
                         menu: result.data.menu,//메뉴
@@ -55,7 +51,7 @@
                 });
             },
             selectMenu(index){
-                this.selectedMenu={};
+                this.selectedMenu=[];
                 this.MenuName = this.menuList[index];
                 var data = {
                     cafe: this.selected,
@@ -94,7 +90,10 @@
         created() {
             this.$http.get('http://localhost:8888/getCafe').then((result) => {//카페리스트 불러오기
                 console.log(result);
-                this.cafeList = result.data;
+                 this.result.push({
+                    name : result.data.cafeName,
+                    address : result.data.cafeAddress,
+                });
             }).catch((err) => {
                 
             });
