@@ -84,11 +84,11 @@
                 this.$http.get('http://localhost:8888/getSelectMenu',{params:{data:data}}).then((result) => {//카페와 메뉴이름으로 메뉴 별점 가져오기
                     console.log(result);//별점 5점 4점 3점 2점 1점을 몇명이 줬는지 받아오기
                     this.selectedMenu.push({
-                        five: result.data.five,
-                        four: result.data.four,
-                        three : result.data.three,
-                        two : result.data.two,
-                        one : result.data.one,
+                        five: `"`+result.data.five+`"`,
+                        four: `"`+result.data.four+`"`,
+                        three : `"`+result.data.three+`"`,
+                        two : `"`+result.data.two+`"`,
+                        one : `"`+result.data.one+`"`,
                     });
                 }).catch((err) => {
                     
@@ -136,14 +136,11 @@
                 this.distance = event.target.value;
             },
             submit(){
-                var data = {
-                    reason : this.reason,
-                    menu : this.menu,
-                    cost : this.cost,
-                    distance : this.distance,
-                }
-                console.log(data);
-                this.$http.get('http://localhost:8888/recommendationCafe',{params:{data: data}}).then((result) => {
+                var reason = this.reason;
+                var menu = this.menu;
+                var cost = this.cost;
+                var distance = this.distance;
+                this.$http.get('http://localhost:8888/recommendationCafe',{params:{reason: reason,menu:menu,cost:cost,distance:distance}}).then((result) => {
                     console.log(result)
                     for(var i=0;i<result.data.length;i++){
                         this.result.push({
