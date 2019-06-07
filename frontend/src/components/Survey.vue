@@ -45,13 +45,13 @@
             <button type="submit">추천받기 GOGO</button>
         </form><br>
         <div>카페목록</div>
-        <div @click="selectCafe(index)" v-for="(cl,index) in result" :key="result.id">{{cl.name}}</div>
+        <div @click="selectCafe(index)" v-for="(cl,index) in result" :key="result.id">카페이름 : {{cl.name}} | 주소: {{cl.address}}</div>
         <div class="selectMenu" v-for="(ml,index) in menuList" v-if="menuList.length!=0" @click="selectMenu(index)">메뉴 : {{ml.menu}} | 평균별점 : {{ml.avgStar}}</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★★★★★ : {{selectedMenu.five}}명</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★★★★ : {{selectedMenu.four}}명</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★★★ : {{selectedMenu.three}}명</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★★ : {{selectedMenu.two}}명</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★ : {{selectedMenu.one}}명</div><br>
+        <div class="Menu" v-if="selectedMenu.length!=0">★★★★★ : {{selectedMenu[0].five}}명</div>
+        <div class="Menu" v-if="selectedMenu.length!=0">★★★★ : {{selectedMenu[0].four}}명</div>
+        <div class="Menu" v-if="selectedMenu.length!=0">★★★ : {{selectedMenu[0].three}}명</div>
+        <div class="Menu" v-if="selectedMenu.length!=0">★★ : {{selectedMenu[0].two}}명</div>
+        <div class="Menu" v-if="selectedMenu.length!=0">★ : {{selectedMenu[0].one}}명</div><br>
     </div>
 </template>
 
@@ -71,6 +71,7 @@
                 menuList:[],
                 selectedMenu:[],
                 MenuName:"",
+                alladdress:[],
             }
         },
         methods:{
@@ -136,17 +137,25 @@
                 this.distance = event.target.value;
             },
             submit(){
+                this.alladdress = this.result;
+                // console.log(this.alladdress)
+                this.result=[];
                 var reason = this.reason;
                 var menu = this.menu;
                 var cost = this.cost;
                 var distance = this.distance;
                 this.$http.get('http://localhost:8888/recommendationCafe',{params:{reason: reason,menu:menu,cost:cost,distance:distance}}).then((result) => {
-                    console.log(result.data)
-                    for(var i=0;i<result.data.length;i++){
-                        this.result.push({
-                            name : result.data[i].cafeName
-                        });
+                    for(var i=0;i<this.alladdress.length;i++){
+                        for(var j=0;j<result.data.length;j++){
+                            if(this.alladdress[i].name==result.data[j]){
+                                this.result.push({
+                                    name : result.data[j],
+                                    address : this.alladdress[i].address
+                                });
+                            }
+                        }
                     }
+                    console.log(this.result)
                 }).catch((err) => {
                     
                 });
