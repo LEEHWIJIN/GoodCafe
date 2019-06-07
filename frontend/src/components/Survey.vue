@@ -40,7 +40,7 @@
                 <option value="3">3</option>
                 <option value="4">4</option>
                 <option value="5">5</option>
-                <option value="5">6</option>
+                <option value="6">6</option>
             </select><br><br>
             <button type="submit">추천받기 GOGO</button>
         </form><br>
@@ -120,16 +120,16 @@
                     this.cost = 0;
                 }
                 else if(event.target.value=="1"){
-                    this.cost = 1;
-                }
-                else if(event.target.value=="2"){
                     this.cost = 2;
                 }
-                else if(event.target.value=="3"){
+                else if(event.target.value=="2"){
                     this.cost = 3;
                 }
-                else{
+                else if(event.target.value=="3"){
                     this.cost = 4;
+                }
+                else{
+                    this.cost = 5;
                 }
             },
             chooseDistance(event){
@@ -141,11 +141,10 @@
                 var cost = this.cost;
                 var distance = this.distance;
                 this.$http.get('http://localhost:8888/recommendationCafe',{params:{reason: reason,menu:menu,cost:cost,distance:distance}}).then((result) => {
-                    console.log(result)
+                    console.log(result.data)
                     for(var i=0;i<result.data.length;i++){
                         this.result.push({
-                            name : result.data[i].cafeName,
-                            address : result.data[i].cafeAddress,
+                            name : result.data[i].cafeName
                         });
                     }
                 }).catch((err) => {

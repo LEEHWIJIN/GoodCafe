@@ -30,11 +30,11 @@ router.get('/getSelectMenu', function(req, res){
                 else if(rows[i].starScore==1) one++
             }
             var data = {
-                five : five,
-                four : four,
-                three : three,
-                two : two,
-                one : one
+                five : String(five),
+                four : String(four),
+                three : String(three),
+                two : String(two),
+                one : String(one)
             }
             console.log(data)
             return res.json(data)
@@ -104,7 +104,9 @@ router.get('/recommendationCafe', function(req, res){
         params.push(req.query.distance)
     }
     sql += 'GROUP BY cafeName'
-            conn.init().query(sql,params,function(err, rows){
+    console.log(sql)
+    console.log(params)
+     conn.init().query(sql,params,function(err, rows){
                 if(err) console.log(err)
                 else {
                     var data = []
@@ -118,6 +120,7 @@ router.get('/recommendationCafe', function(req, res){
                             }
                         }
                     }
+                    console.log(req.query.cost)
                     res.json(data)
                 }
             })

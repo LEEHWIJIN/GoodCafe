@@ -4,11 +4,11 @@
         <label>별점을 보시고 싶은/주고 싶은 카페를 선택해주세요!</label><br>
         <div @click="selectCafe(index)" v-for="(cl,index) in result" :key="result.id">{{cl.name}}</div>
         <div class="selectMenu" v-for="(ml,index) in menuList" v-if="menuList.length!=0" @click="selectMenu(index)">메뉴 : {{ml.menu}} | 평균별점 : {{ml.avgStar}}</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★★★★★ : {{selectedMenu.five}}명</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★★★★ : {{selectedMenu.four}}명</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★★★ : {{selectedMenu.three}}명</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★★ : {{selectedMenu.two}}명</div>
-        <div class="Menu" v-if="selectedMenu.length!=0">★ : {{selectedMenu.one}}명</div><br>
+        <div class="Menu" v-if="selectedMenu.length!=0">★★★★★ : {{selectedMenu[0].five}}명</div>
+        <div class="Menu" v-if="selectedMenu.length!=0">★★★★ : {{selectedMenu[0].four}}명</div>
+        <div class="Menu" v-if="selectedMenu.length!=0">★★★ : {{selectedMenu[0].three}}명</div>
+        <div class="Menu" v-if="selectedMenu.length!=0">★★ : {{selectedMenu[0].two}}명</div>
+        <div class="Menu" v-if="selectedMenu.length!=0">★ : {{selectedMenu[0].one}}명</div><br>
         <form v-if="selectedMenu.length!=0" v-on:submit.prevent="rating">
             <label>메뉴에 대한 평가를 해주세요!</label><br>
             <select class="selectpicker select-size" @change="selectStarscore($event)">
@@ -58,12 +58,12 @@
                 this.selectedMenu=[];
                 var cafeName = this.menuList[index].cafe;
                 this.MenuName = this.menuList[index].menu;
-                var data = {
-                    cafe: cafeName,
-                    menu : this.MenuName,
-                };
-                this.$http.get('http://localhost:8888/getSelectMenu',{params:{data:data}}).then((result) => {//카페와 메뉴이름으로 메뉴 별점 가져오기
-                    console.log(result);//별점 5점 4점 3점 2점 1점을 몇명이 줬는지 받아오기
+                // var data = {
+                //
+                // };
+                // console.log(data)
+                this.$http.get('http://localhost:8888/getSelectMenu',{params:{cafe: cafeName, menu : this.MenuName}}).then((result) => {//카페와 메뉴이름으로 메뉴 별점 가져오기
+                   //별점 5점 4점 3점 2점 1점을 몇명이 줬는지 받아오기
                     this.selectedMenu.push({
                         five: result.data.five,
                         four: result.data.four,
@@ -71,6 +71,7 @@
                         two : result.data.two,
                         one : result.data.one,
                     });
+                    console.log(this.selectedMenu)
                 }).catch((err) => {
                     
                 });
