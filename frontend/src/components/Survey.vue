@@ -99,7 +99,7 @@
                 this.menuList=[];//카페 선택할때 메뉴 비워주기
                 var cafeName = this.result[index].name;
                 this.$http.get('http://localhost:8888/getCafeMenu',{params:{cafe:cafeName}}).then((result) => {//고른 카페에 대한 메뉴 불러오는 것
-                    console.log(result);
+                    console.log(result.data);
                     for(var i=0;i<result.data.length;i++){
                         this.menuList.push({
                             menu: result.data[i].menu,//메뉴

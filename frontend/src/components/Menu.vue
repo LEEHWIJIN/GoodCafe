@@ -35,21 +35,23 @@
                 selectedMenu:[],
                 starScore:[],
                 MenuName:"",
+                cafeName:"",
             }
         },
         methods: {
             selectCafe(index) {
                 this.menuList=[];//카페 선택할때 메뉴 비워주기
-                var cafeName = this.result[index].name;
-                this.$http.get('http://localhost:8888/getCafeMenu',{params:{cafe:cafeName}}).then((result) => {//고른 카페에 대한 메뉴 불러오는 것
+                this.cafeName = this.result[index].name;
+                this.$http.get('http://localhost:8888/getCafeMenu',{params:{cafe:this.cafeName}}).then((result) => {//고른 카페에 대한 메뉴 불러오는 것
                     console.log(result);
                     for(var i=0;i<result.data.length;i++){
                         this.menuList.push({
-                            cafe: cafeName,
+                            cafe: this.cafeName,
                             menu: result.data[i].menu,//메뉴
                             avgStar : result.data[i].avgStar,//평균 별점
                         });
                     }
+                    console.log(this.menuList)
                 }).catch((err) => {
                     
                 });
@@ -81,10 +83,11 @@
             },
             rating(){
                 var data = {
-                    cafe : this.selected,//카페이름
+                    cafe : this.cafeName,//카페이름
                     menu : this.MenuName,//메뉴이름
                     rating : this.starScore,//별점 1/2/3/4/5로 보냄
                 };
+                console.log(data)
                 this.$http.post('http://localhost:8888/ratingCafe',{data:data}).then((result) => {
                     console.log(result);//선택한 카페와 메뉴에 대한 별점주기
                     alert("성공적으로 평가가 되었습니다.")
