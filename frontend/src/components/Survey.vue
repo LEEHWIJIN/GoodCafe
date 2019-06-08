@@ -45,7 +45,7 @@
             <button type="submit">추천받기 GOGO</button>
         </form><br>
         <div>카페목록</div>
-        <div @click="selectCafe(index)" v-for="(cl,index) in result" :key="result.id">카페이름 : {{cl.name}} | 주소: {{cl.address}}</div>
+        <div @click="selectCafe(index)" v-for="(cl,index) in recommResult" :key="recommResult.id">카페이름 : {{cl.name}} | 주소: {{cl.address}}</div>
         <div class="selectMenu" v-for="(ml,index) in menuList" v-if="menuList.length!=0" @click="selectMenu(index)">메뉴 : {{ml.menu}} | 평균별점 : {{ml.avgStar}}</div>
         <div class="Menu" v-if="selectedMenu.length!=0">★★★★★ : {{selectedMenu[0].five}}명</div>
         <div class="Menu" v-if="selectedMenu.length!=0">★★★★ : {{selectedMenu[0].four}}명</div>
@@ -72,6 +72,7 @@
                 selectedMenu:[],
                 MenuName:"",
                 alladdress:[],
+                recommResult:[],
             }
         },
         methods:{
@@ -112,9 +113,11 @@
             },
             chooseReason(event){
                 this.reason = event.target.value;
+                console.log(this.reason)
             },
             chooseMenu(event){
                 this.menu = event.target.value;
+                console.log(this.menu)
             },
             chooseCost(event){
                 if(event.target.value=="0"){
@@ -139,7 +142,8 @@
             submit(){
                 this.alladdress = this.result;
                 // console.log(this.alladdress)
-                this.result=[];
+                // this.result=[];
+                this.recommResult=[];
                 var reason = this.reason;
                 var menu = this.menu;
                 var cost = this.cost;
@@ -148,14 +152,14 @@
                     for(var i=0;i<this.alladdress.length;i++){
                         for(var j=0;j<result.data.length;j++){
                             if(this.alladdress[i].name==result.data[j]){
-                                this.result.push({
+                                this.recommResult.push({
                                     name : result.data[j],
                                     address : this.alladdress[i].address
                                 });
                             }
                         }
                     }
-                    console.log(this.result)
+                    // console.log(this.result)
                 }).catch((err) => {
                     
                 });
